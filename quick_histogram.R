@@ -42,12 +42,12 @@ if(!is.null(opts$breaks)) {
   hist(dat$V1,
        main = opts$title,
        breaks = as.integer(opts$breaks),
-       xlim = c(0, 10),
+       # xlim = c(0, 10),
        xlab = NULL)
 } else {
   hist(dat$V1,
        main = opts$title,
-       xlim = c(0, 10),
+       # xlim = c(0, 10),
        xlab = NULL)
 }
 dev.off()
