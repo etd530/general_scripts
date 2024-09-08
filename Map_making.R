@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+#!/opt/R/4.2.3/bin/Rscript
 
                             ###Script to make maps###
 
@@ -31,13 +31,19 @@ option_list=list(
               metavar="character"),
   
   make_option(c("-c", "--coordinates"), type="character", default=NULL,
+  
               help="Name of the file containing the coordinates (must be semicolon-separated CSV)",
+              metavar="character"),
+  make_option(c("--color"), type="character", default = NULL,
+              help="Name of the column to use to color the points.",
               metavar="character")
 )
 
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
+#### OPERATORS ####
+`%!in%` = Negate(`%in%`)
 
 #### ARG CHECKS ####
 if (!("coordinates" %in% names(opt))){
@@ -46,24 +52,38 @@ if (!("coordinates" %in% names(opt))){
 }
 
 #### VARS ####
-world_HD <- "gadm41_GBR_0" # Breat Britain borders
-# world <- "TM_WORLD_BORDERS-0.3"
+# world_HD <- "shape/gadm41_GBR_0" # Breat Britain borders
+world <- "shape/TM_WORLD_BORDERS-0.3"
 # world_bad <- "TM_WORLD_BORDERS_SIMPL-0.3"
-layer <- world_HD # Select this name from the objects above, based on the quality you prefer. The low-quality one takes less time to be plotted
-adj <- "gadm41_IRL_0" # Ireland borders
-adj2 <- "gadm36_FRA_0" # France borders
-adj3 <- "gadm41_IMN_0" # Isle of Man borders
-adj4 <- "gadm36_ESP_0" # Spain borders
-adj5 <- "Catalonia_shapefile" # Catalonia
+layer <- world # Select this name from the objects above, based on the quality you prefer. The low-quality one takes less time to be plotted
+# adj <- "gadm41_IRL_0" # Ireland borders
+# adj2 <- "gadm36_FRA_0" # France borders
+# adj3 <- "gadm41_IMN_0" # Isle of Man borders
+# adj4 <- "gadm36_ESP_0" # Spain borders
+# adj5 <- "Catalonia_shapefile" # Catalonia
 
-ext <- gsub(pattern = "(", replacement = "", x = opt$extent, fixed = T)
-ext <- gsub(pattern = ")", replacement = "", x = ext, fixed = T)
-ext <- as.double(as.vector(strsplit(ext, split=",")[[1]]))
+if ("extent" %in% names(opt)){
+  ext <- gsub(pattern = "(", replacement = "", x = opt$extent, fixed = T)
+  ext <- gsub(pattern = ")", replacement = "", x = ext, fixed = T)
+  ext <- as.double(as.vector(strsplit(ext, split=",")[[1]]))
+}
+
 out <- opt$out
 coords <- opt$coordinates
 
-
 #### MAIN ####
+### Read dataset ###
+dataset <- read.csv(coords, header = TRUE, sep = ";",) #Select your .csv with Longitude column called Lon and Latitude column called Lat, in decimal degrees
+
+if ("extent" %!in% names(opt)){
+  lowleftlon <- min(dataset$Lon)
+  toprightlon <- max(dataset$Lon)
+  lowleftlat <- min(dataset$Lat)
+  toprightlat <- max(dataset$Lat)
+  
+  ext <- c(lowleftlon, toprightlon, lowleftlat, toprightlat)
+}
+
 ### plot map ###
 shape <- readOGR(dsn=path.expand("shape"),layer=layer)
 shape <- crop(shape, extent(ext))
