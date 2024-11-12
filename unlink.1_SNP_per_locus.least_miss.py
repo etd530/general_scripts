@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 __author__ = 'Katherine Silliman and Michael A. Alcorn'
 
 ## Code to subset one SNP per GBS locus from a VCF file. Chooses the SNP
