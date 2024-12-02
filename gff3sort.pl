@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+# copied from: https://github.com/billzt/gff3sort/blob/master/gff3sort.pl
 use 5.010_001;
 use strict;
 use warnings;

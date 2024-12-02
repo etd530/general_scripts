@@ -1,4 +1,4 @@
-#!/opt/R/4.2.3/bin/Rscript
+#!/usr/bin/env Rscript
 
                             ###Script to make maps###
 
@@ -31,7 +31,6 @@ option_list=list(
               metavar="character"),
   
   make_option(c("-c", "--coordinates"), type="character", default=NULL,
-  
               help="Name of the file containing the coordinates (must be semicolon-separated CSV)",
               metavar="character"),
   make_option(c("--color"), type="character", default = "grey",
