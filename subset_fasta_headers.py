@@ -31,7 +31,8 @@ def subset_fasta_headers(fasta_file, delimiter, fields, threads=1, verbose=False
 		threads: Number of threads to use (default: 1).
 		verbose: Print the progressions of the program to the terminal (Standard Error).
 	"""
-	with open(fasta_file, 'r') as input_handle, open(f"{fasta_file}.renamed.fasta", 'w') as output_handle:
+	prefix = fasta_file.split('/')[-1].rstrip('.fasta')
+	with open(fasta_file, 'r') as input_handle, open(f"{prefix}.renamed.fasta", 'w') as output_handle:
 		for record in SeqIO.parse(input_handle, "fasta"):
 			header_fields = record.id.split(delimiter)
 			try:
