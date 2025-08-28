@@ -38,6 +38,7 @@ if __name__ == "__main__":
 		# print(seq_feature)
 		if seq_feature.type=="gene":
 			feature_count += 1 # add one if we have found a new gene feature
+		if seq_feature.type in ["gene", "tRNA", "CDS", "rRNA"]:
 			if 'locus_tag' not in seq_feature.qualifiers:
 				new_tag = prefix + "%03d" % feature_count
 				# print(new_tag)
