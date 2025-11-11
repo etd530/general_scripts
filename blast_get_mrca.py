@@ -60,6 +60,8 @@ if __name__ == '__main__':
 				taxon = taxopy.Taxon(taxid, taxdb)
 			except ValueError:
 				sys.exit(f"ERROR: Invalid taxid '{taxid_str}' in column {colnum}. Exiting.")
+			except taxopy.exceptions.TaxidError:
+				print("The input integer is not a valid NCBI taxonomic identifier: %s" % taxid_str)
 			if restrict_taxid in taxon.taxid_lineage:
 				taxa_set.add(taxon)
 
