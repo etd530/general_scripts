@@ -54,16 +54,17 @@ if __name__ == '__main__':
 		# Collect taxids from the specified column from the subset dataframe
 		taxa_set = set()
 		for line in query_df.itertuples(index=False):
-			taxid_str = str(line[colnum])
-			try:
-				taxid = int(taxid_str)
-				taxon = taxopy.Taxon(taxid, taxdb)
-			except ValueError:
-				sys.exit(f"ERROR: Invalid taxid '{taxid_str}' in column {colnum}. Exiting.")
-			except taxopy.exceptions.TaxidError:
-				print("The input integer is not a valid NCBI taxonomic identifier: %s" % taxid_str)
-			if restrict_taxid in taxon.taxid_lineage:
-				taxa_set.add(taxon)
+			taxid_list = str(line[colnum]).split(';')  # in case of multiple taxids separated by semicolon
+			for taxid_str in taxid_list:
+				try:
+					taxid = int(taxid_str)
+					taxon = taxopy.Taxon(taxid, taxdb)
+				except ValueError:
+					sys.exit(f"ERROR: Invalid taxid '{taxid_str}' in column {colnum}. Exiting.")
+				except taxopy.exceptions.TaxidError:
+					print("The input integer is not a valid NCBI taxonomic identifier: %s. Please try update the taxdump files." % taxid_str)
+				if restrict_taxid in taxon.taxid_lineage:
+					taxa_set.add(taxon)
 
 		# Get MRCA
 		if taxa_set:
