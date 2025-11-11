@@ -46,6 +46,7 @@ if __name__ == '__main__':
 	query_ids = df[0].unique().tolist()
 
 	# For each query, find MRCA of taxids in specified column, restricted to given taxid
+	out_string = "query\tMRCA_name\n"
 	for query_id in query_ids:
 		# print(f'Processing query ID: {query_id}')
 		query_df = df[df[0] == query_id]
@@ -66,6 +67,10 @@ if __name__ == '__main__':
 		if taxa_set:
 			mrca_taxon = taxopy.find_lca(list(taxa_set), taxdb)
 			mrca_name = mrca_taxon.name
-			print(f'{blast_tsv}\t{query_id}\t{mrca_name}')
+			out_string = out_string + f'{query_id}\t{mrca_name}\n'
 		else:
 			print('No valid taxids found in the BLAST TSV file, or no hits belonging to the restricted taxonomic search.')
+		
+		# Write output to file
+		with open(f'{blast_tsv}.mrcas.tsv', 'w') as out_fh:
+			out_fh.write(out_string)
