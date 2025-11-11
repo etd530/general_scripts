@@ -65,8 +65,13 @@ if __name__ == '__main__':
 
 		# Get MRCA
 		if taxa_set:
-			mrca_taxon = taxopy.find_lca(list(taxa_set), taxdb)
-			mrca_name = mrca_taxon.name
+			if len(taxa_set) > 1: # function to find LCA requires at least 2 taxa
+				mrca_taxon = list(taxa_set)[0]
+				mrca_taxon = taxopy.find_lca(list(taxa_set), taxdb)
+				mrca_name = mrca_taxon.name
+			elif len(taxa_set) == 1: # if there is only one taxon, that is the MRCA
+				mrca_taxon = list(taxa_set)[0]
+				mrca_name = mrca_taxon.name
 			out_string = out_string + f'{query_id}\t{mrca_name}\n'
 		else:
 			print('No valid taxids found in the BLAST TSV file, or no hits belonging to the restricted taxonomic search.')
