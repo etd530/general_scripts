@@ -78,6 +78,7 @@ if __name__ == '__main__':
 			out_string = out_string + f'{query_id}\t{mrca_name}\n'
 		else:
 			print('No valid taxids found in the BLAST TSV file, or no hits belonging to the restricted taxonomic search.')
+			out_string = out_string + f'{query_id}\tNo_valid_taxids_found\n'
 		
 		# Write output to file
 		with open(f'{blast_tsv}.mrcas.tsv', 'w') as out_fh:
