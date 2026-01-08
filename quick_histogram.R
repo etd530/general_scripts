@@ -39,13 +39,13 @@ dat <- read.table(dat.con, sep = " ", header = FALSE)
 png(paste0(opts$outprefix, ".png"))
 # pdf(paste0(opts$outprefix, ".pdf"))
 if(!is.null(opts$breaks)) {
-  hist(dat$V1,
+  hist(as.numeric(dat$V1),
        main = opts$title,
        breaks = as.integer(opts$breaks),
        # xlim = c(0, 10),
        xlab = NULL)
 } else {
-  hist(dat$V1,
+  hist(as.numeric(dat$V1),
        main = opts$title,
        # xlim = c(0, 10),
        xlab = NULL)
