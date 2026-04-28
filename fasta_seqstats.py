@@ -80,8 +80,8 @@ if __name__ == '__main__':
 		write_string += "Median length of sequences: %s\n" % median_len_seqs
 		write_string += "Minimum length of sequences: %s\n" % min_len_seqs
 		write_string += "Maximum length of sequences: %s\n" % max_len_seqs
-		# write_string += "5% quantile of the length of sequences: %s\n" % q5_len_seqs
-		# write_string += "95% quantile of the length of sequences: %s\n" % q95_len_seqs
+		write_string += "5%% quantile of the length of sequences: %s\n" % q5_len_seqs
+		write_string += "95%% quantile of the length of sequences: %s\n" % q95_len_seqs
 		log_file.write(write_string)
 	# Generate a histogram of the length of the sequences
 	plt.figure(figsize = (10, 6))
