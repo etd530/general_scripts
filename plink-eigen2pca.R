@@ -87,7 +87,7 @@ if (!is.null(args$miss)) {
       xlab(x_label) +
       ylab(y_label) +
       ggtitle(paste0("PCA for ", genus)) +
-      theme(plot.title = element_text(hjust = 0.5))
+      theme(plot.title = element_text(hjust = 0.5), legend.position = "inside")
     return(pca_plot)
   }
 }
