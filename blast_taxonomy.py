@@ -6,7 +6,7 @@ You can get the MRCA of the taxids of the hits. Optionally, provide a taxid to r
 You can also compute an alien index score for belonging to a given taxid (log10(best belonging eval) - log10(best nonbelonging eval)).
 
 Usage:
-    blast_taxonomy.py <BLAST_TSV> <TAXDB> --colnum=<INT> [--taxid=<TAXID> --alien-index=<TAXID>] [-h, --help]
+    blast_taxonomy.py <BLAST_TSV> <TAXDB> --eval_colnum=<INT> [--taxid=<TAXID> --alien-index=<TAXID> --taxids_colnum=<INT>] [-h, --help]
 
 Arguments:
     <BLAST_TSV>               A TSV file output from BLAST with taxids. Query ID is expected in column 0.
@@ -86,13 +86,17 @@ if __name__ == '__main__':
 				# get the taxid and add it to the set of taxa if it belongs to the restricted taxid
 				try:
 					taxid = int(taxid_str)
+					# print(f'Processing taxid: {taxid} with e-value: {eval}')
 					taxon = taxopy.Taxon(taxid, taxdb)
+					# print(f'Taxon name: {taxon.name}')
 				except ValueError:
 					sys.exit(f"ERROR: Invalid taxid '{taxid_str}' in column {taxids_colnum}. Exiting.")
 				except taxopy.exceptions.TaxidError:
 					print("The input integer is not a valid NCBI taxonomic identifier: %s. Please try update the taxdump files." % taxid_str)
 				if restrict_taxid in taxon.taxid_lineage:
+					# print("Adding taxid %s to the set of taxa for query %s" % (taxid, query_id))
 					taxa_set.add(taxon)
+					# print(taxa_set)
 				# if alien index is requested, update the best belonging and non-belonging e-values
 				if alien_index_taxid != 1:
 					if alien_index_taxid in taxon.taxid_lineage:
@@ -101,21 +105,24 @@ if __name__ == '__main__':
 					else:
 						if eval < min_nonbelonging_eval:
 							min_nonbelonging_eval = eval
-		
+
 		# Compute alien index if requested
 		if alien_index_taxid != 1:
 			ai_score = alien_index(min_belonging_eval, min_nonbelonging_eval)
-			continue
+			# print(ai_score)
 
+		print(taxa_set)
 		# Get MRCA
 		if taxa_set:
 			if len(taxa_set) > 1: # function to find LCA requires at least 2 taxa
 				mrca_taxon = list(taxa_set)[0]
 				mrca_taxon = taxopy.find_lca(list(taxa_set), taxdb)
 				mrca_name = mrca_taxon.name
+				print(f'MRCA of taxids for query {query_id} is {mrca_name} (taxid {mrca_taxon.taxid})')
 			elif len(taxa_set) == 1: # if there is only one taxon, that is the MRCA
 				mrca_taxon = list(taxa_set)[0]
 				mrca_name = mrca_taxon.name
+				print(f'Only one taxid found for query {query_id}, so MRCA is {mrca_name} (taxid {mrca_taxon.taxid})')
 			if alien_index_taxid != 1:
 				out_string = out_string + f'{query_id}\t{mrca_name}\t{ai_score}\n'
 			else:
