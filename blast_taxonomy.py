@@ -111,7 +111,7 @@ if __name__ == '__main__':
 			ai_score = alien_index(min_belonging_eval, min_nonbelonging_eval)
 			# print(ai_score)
 
-		print(taxa_set)
+		# print(taxa_set)
 		# Get MRCA
 		if taxa_set:
 			if len(taxa_set) > 1: # function to find LCA requires at least 2 taxa
