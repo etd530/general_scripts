@@ -13,7 +13,7 @@ Arguments:
 """
 
 #### LIBS ####
-from Bio import SeqIO           # to work with sequence files7
+from Bio import SeqIO           # to work with sequence files
 from docopt import docopt       # to create the argument parser
 import matplotlib.pyplot as plt # basic plotting
 import seaborn                  # nice plotting
@@ -36,8 +36,10 @@ if __name__ == '__main__':
 	# Iterate over the fasta file
 	print("Reading file %s..." % fasta_file)
 	
+	id_seqs = []
 	len_seqs = []
 	for seq_record in SeqIO.parse(fasta_file, "fasta"):
+		id_seqs.append(seq_record.id)
 		len_seqs.append(len(seq_record))
 	
 	print("Done reading file %s. Computing statistics..." % fasta_file)
