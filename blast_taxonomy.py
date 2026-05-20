@@ -16,7 +16,7 @@ Options:
     --taxids_colnum=<INT>     Column number (0-based) in the BLAST TSV file where taxids are located.
     --taxid=<TAXID>           Taxid to restrict the MRCA search to a specific clade. [default: 1]
     --eval_colnum=<INT>       Column number (0-based) in the BLAST TSV file where e-values are located, for alien index computation.
-	--alien-index=<TAXID>     Taxid to use to compute an alien index score for belonging to that taxon. [default: 1]
+    --alien-index=<TAXID>     Taxid to use to compute an alien index score for belonging to that taxon. [default: 1]
     -h, --help                Show this help message and exit.
 """
 
