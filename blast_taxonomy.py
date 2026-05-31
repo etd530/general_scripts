@@ -36,7 +36,7 @@ def alien_index(best_belonging_eval, best_nonbelonging_eval):
 	elif best_nonbelonging_eval == float('inf'):
 		return np.inf  # if no non-belonging hits, AI is positive infinity
 	else:
-		return np.log10(best_belonging_eval) - np.log10(best_nonbelonging_eval) # else we do the actual number
+		return np.log10(best_nonbelonging_eval) - np.log10(best_belonging_eval) # else we do the actual number
 
 if __name__ == '__main__':
 	#### ARGS #####
@@ -65,9 +65,9 @@ if __name__ == '__main__':
 
 	# Prepare header line for output file
 	if alien_index_taxid != 1:
-		out_string = "query\tMRCA_name\tAlien_index_score\n"
+		out_string = "query\tMRCA_name\tMRCA_lineage\tAlien_index_score\n"
 	else:
-		out_string = "query\tMRCA_name\n"
+		out_string = "query\tMRCA_name\tMRCA_lineage\n"
 
 	# Iterate over each query to find the MRCA of taxids in specified column, restricted to given taxid
 	# Also compute alien index if requested, by tracking the best e-value of belonging and non-belonging hits to the specified taxid
@@ -118,21 +118,23 @@ if __name__ == '__main__':
 				mrca_taxon = list(taxa_set)[0]
 				mrca_taxon = taxopy.find_lca(list(taxa_set), taxdb)
 				mrca_name = mrca_taxon.name
+				mrca_lineage = mrca_taxon.name_lineage
 				print(f'MRCA of taxids for query {query_id} is {mrca_name} (taxid {mrca_taxon.taxid})')
 			elif len(taxa_set) == 1: # if there is only one taxon, that is the MRCA
 				mrca_taxon = list(taxa_set)[0]
 				mrca_name = mrca_taxon.name
+				mrca_lineage = mrca_taxon.name_lineage
 				print(f'Only one taxid found for query {query_id}, so MRCA is {mrca_name} (taxid {mrca_taxon.taxid})')
 			if alien_index_taxid != 1:
-				out_string = out_string + f'{query_id}\t{mrca_name}\t{ai_score}\n'
+				out_string = out_string + f'{query_id}\t{mrca_name}\t{mrca_lineage}\t{ai_score}\n'
 			else:
-				out_string = out_string + f'{query_id}\t{mrca_name}\n'
+				out_string = out_string + f'{query_id}\t{mrca_name}\t{mrca_lineage}\n'
 		else:
 			print('No valid taxids found in the BLAST TSV file, or no hits belonging to the restricted taxonomic search.')
 			if alien_index_taxid != 1:
-				out_string = out_string + f'{query_id}\tNo_valid_taxids_found\t{ai_score}\n'
+				out_string = out_string + f'{query_id}\tNo_valid_taxids_found\tNo_valid_taxids_found\t{ai_score}\n'
 			else:
-				out_string = out_string + f'{query_id}\tNo_valid_taxids_found\n'
+				out_string = out_string + f'{query_id}\tNo_valid_taxids_found\tNo_valid_taxids_found\n'
 		
 	# Write output to file
 	with open(f'{blast_tsv}.taxonomy.tsv', 'w') as out_fh:
