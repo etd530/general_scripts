@@ -6,7 +6,7 @@ You can get the MRCA of the taxids of the hits. Optionally, provide a taxid to r
 You can also compute an alien index score for belonging to a given taxid (log10(best belonging eval) - log10(best nonbelonging eval)).
 
 Usage:
-    blast_taxonomy.py <BLAST_TSV> <TAXDB> --eval_colnum=<INT> [--taxid=<TAXID> --alien-index=<TAXID> --taxids_colnum=<INT>] [-h, --help]
+    blast_taxonomy.py <BLAST_TSV> <TAXDB> --eval_colnum=<INT> --taxids_colnum=<INT> [--taxid=<TAXID> --alien-index=<TAXID>] [-h, --help]
 
 Arguments:
     <BLAST_TSV>               A TSV file output from BLAST with taxids. Query ID is expected in column 0.
